@@ -1,11 +1,14 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import nltk
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 
-import nltk
-nltk.download('punkt')
 
 def load_model():
     try:
