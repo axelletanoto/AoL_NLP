@@ -23,7 +23,7 @@ classifier = load_model()
 def classify_tweet(tweet):
     words = word_tokenize(tweet)
     features = {word: (word in words) for word in words}
-    return classifier.classify(features)
+    return classifier.predict(features)
 
 st.title("Suicidal Tweet Detection")
 
