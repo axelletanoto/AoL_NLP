@@ -8,7 +8,26 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import string
 
+def preprocess_text(text):
+    # Tokenize the text into words
+    words = word_tokenize(text.lower())  # Convert to lowercase to ensure case-insensitive processing
+    
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+
+    # Remove punctuation
+    words = [word for word in words if word not in string.punctuation]
+
+    # Lemmatize words
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
+    
+    return ' '.join(words)
 
 def load_model():
     try:
@@ -18,12 +37,27 @@ def load_model():
         st.error("Model file not found. Train the model first.")
         return None
     
+def load_vectorizer():
+    try:
+        with open("vectorize.pickle", "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        st.error("Vectorizer file not found. Train the model first.")
+        return None
+    
 classifier = load_model()
+vectorizer = load_vectorizer()
 
 def classify_tweet(tweet):
-    words = word_tokenize(tweet)
-    features = {word: (word in words) for word in words}
-    return classifier.predict(features)
+    # Preprocess the tweet text
+    preprocessed_tweet = preprocess_text(tweet)
+    
+    # Convert the tweet to the same format as training data
+    tweet_vector = vectorizer.transform([preprocessed_tweet])
+    
+    # Predict the category using the classifier
+    category = classifier.predict(tweet_vector)
+    return category[0]
 
 st.title("Suicidal Tweet Detection")
 
