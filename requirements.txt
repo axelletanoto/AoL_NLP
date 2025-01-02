@@ -1,0 +1,5 @@
+pandas
+pickle5
+nltk
+scikit-learn
+spacy
