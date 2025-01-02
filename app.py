@@ -4,6 +4,9 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 
+import nltk
+nltk.download('punkt')
+
 def load_model():
     try:
         with open("model.pickle", "rb") as file:
