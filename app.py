@@ -12,7 +12,7 @@ from nltk.probability import FreqDist
 
 def load_model():
     try:
-        with open("model.pickle", "rb") as file:
+        with open("best_model_rf.pickle", "rb") as file:
             return pickle.load(file)
     except FileNotFoundError:
         st.error("Model file not found. Train the model first.")
