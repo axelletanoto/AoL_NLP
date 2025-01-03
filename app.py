@@ -13,17 +13,11 @@ from nltk.stem import WordNetLemmatizer
 import string
 
 def preprocess_text(text):
-    # Tokenize the text into words
-    words = word_tokenize(text.lower())  # Convert to lowercase to ensure case-insensitive processing
+    words = word_tokenize(text.lower()) 
     
-    # Remove stopwords
     stop_words = set(stopwords.words('english'))
     words = [word for word in words if word not in stop_words]
-
-    # Remove punctuation
     words = [word for word in words if word not in string.punctuation]
-
-    # Lemmatize words
     lemmatizer = WordNetLemmatizer()
     words = [lemmatizer.lemmatize(word) for word in words]
     
@@ -49,13 +43,8 @@ classifier = load_model()
 vectorizer = load_vectorizer()
 
 def classify_tweet(tweet):
-    # Preprocess the tweet text
     preprocessed_tweet = preprocess_text(tweet)
-    
-    # Convert the tweet to the same format as training data
     tweet_vector = vectorizer.transform([preprocessed_tweet])
-    
-    # Predict the category using the classifier
     category = classifier.predict(tweet_vector)
     return category[0]
 
